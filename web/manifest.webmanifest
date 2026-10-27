@@ -1,0 +1,13 @@
+{
+  "name": "DuoReady",
+  "short_name": "DuoReady",
+  "description": "Check if an iPhone app is letterboxed on iPhone Duo's inner display.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14130f",
+  "theme_color": "#14130f",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

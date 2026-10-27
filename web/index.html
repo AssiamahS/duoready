@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DuoReady</title>
+<meta name="description" content="Paste an App Store link and see if the app is likely letterboxed on iPhone Duo's inner display. Then get it refit.">
+<meta name="theme-color" content="#14130f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="#" aria-label="DuoReady home">
+    <span class="mark" aria-hidden="true"><i></i><i></i></span>
+    <span>Duo<b>Ready</b></span>
+  </a>
+  <nav>
+    <a href="#lab">Checker</a>
+    <a href="#refit">Refit pricing</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">iPhone Duo shipped Oct 23, 2026 &middot; 7.6&Prime; inner display</p>
+  <h1>Is your app <em>letterboxed</em> on the fold?</h1>
+  <p class="lede">Apps not rebuilt with the iOS 27.1 SDK open on Duo's inner screen as a phone-sized window with black bars. Paste an App Store link and check in a few seconds.</p>
+</section>
+
+<main id="lab" class="split">
+  <section class="pane left" aria-label="Inputs">
+    <div class="tabs" role="tablist">
+      <button role="tab" data-tab="check" aria-selected="true">Check an app</button>
+      <button role="tab" data-tab="leads" aria-selected="false">Lead list</button>
+      <button role="tab" data-tab="saved" aria-selected="false">Saved <span id="savedCount" class="pill">0</span></button>
+    </div>
+
+    <div class="tabpanel" data-panel="check">
+      <form id="checkForm" class="field">
+        <label for="appUrl">App Store link, app ID, or app name</label>
+        <div class="row">
+          <input id="appUrl" name="appUrl" autocomplete="off" placeholder="https://apps.apple.com/us/app/…/id284882215" required>
+          <button class="btn" type="submit">Check</button>
+        </div>
+        <p class="hint">Uses Apple's public iTunes lookup. Nothing is sent anywhere else.</p>
+      </form>
+      <div class="examples">
+        <span>Try:</span>
+        <button class="chip" data-example="NJ TRANSIT">NJ TRANSIT</button>
+        <button class="chip" data-example="DockBook Longshore">DockBook</button>
+        <button class="chip" data-example="Shipwell">Shipwell</button>
+        <button class="chip" data-example="284882215">Facebook</button>
+      </div>
+      <ol id="recent" class="list"></ol>
+    </div>
+
+    <div class="tabpanel" data-panel="leads" hidden>
+      <form id="leadForm" class="field">
+        <label for="leadTerm">Keyword</label>
+        <div class="row">
+          <input id="leadTerm" placeholder="trucking, transit, freight, port…" required>
+          <select id="leadCountry" aria-label="Store country">
+            <option value="us">US</option><option value="ca">CA</option><option value="gb">UK</option><option value="au">AU</option>
+          </select>
+        </div>
+        <label class="check"><input type="checkbox" id="leadStaleOnly" checked> Only apps not updated since the 27.1 SDK</label>
+        <button class="btn wide" type="submit">Build lead list</button>
+      </form>
+      <div class="leadbar" hidden id="leadBar">
+        <span id="leadSummary"></span>
+        <button class="btn ghost small" id="leadCsv" type="button">Export CSV</button>
+      </div>
+      <ol id="leads" class="list"></ol>
+    </div>
+
+    <div class="tabpanel" data-panel="saved" hidden>
+      <p class="hint">Apps you starred. Kept in this browser only.</p>
+      <ol id="saved" class="list"></ol>
+    </div>
+  </section>
+
+  <div class="hinge" aria-hidden="true"></div>
+
+  <section class="pane right" aria-label="Report" id="reportPane">
+    <div id="report" class="report empty">
+      <div class="fold-demo" aria-hidden="true">
+        <div class="screen"><div class="app"></div></div>
+      </div>
+      <h2>No app checked yet</h2>
+      <p>The report shows the app's last release date compared with the iOS 27.1 SDK, whether the release notes mention Duo, and how many users see the black bars.</p>
+    </div>
+  </section>
+</main>
+
+<section id="refit" class="refit">
+  <div class="refit-head">
+    <p class="eyebrow">Fixed-price refit</p>
+    <h2>We make your app fill the fold.</h2>
+    <p>Rebuild on Xcode 27.1, adaptive layout for the 7.6&Prime; inner display, state preserved across fold and unfold, and Duo screenshots ready for April 2027 submissions. You keep the code; we open a pull request.</p>
+  </div>
+  <div class="tiers">
+    <article class="tier">
+      <h3>Rebuild &amp; verify</h3>
+      <p class="price">$299</p>
+      <ul>
+        <li>Rebuild on the iOS 27.1 SDK</li>
+        <li>Inner/outer display smoke test, every screen</li>
+        <li>Duo screenshot set for App Store Connect</li>
+        <li>Delivered in 3 business days</li>
+      </ul>
+      <button class="btn start" data-tier="Rebuild & verify ($299)">Start</button>
+    </article>
+    <article class="tier featured">
+      <h3>Audit &amp; patch</h3>
+      <p class="price">$599</p>
+      <ul>
+        <li>Everything in Rebuild</li>
+        <li>Replace orientation checks with size classes</li>
+        <li>Fix safe areas, sheets and the tab bar on the inner display</li>
+        <li>Fold/unfold state preservation</li>
+      </ul>
+      <button class="btn start" data-tier="Audit & patch ($599)">Start</button>
+    </article>
+    <article class="tier">
+      <h3>Two-pane refit</h3>
+      <p class="price">$999</p>
+      <ul>
+        <li>Everything in Audit</li>
+        <li>NavigationSplitView or split layout for one key flow</li>
+        <li>Split View on iPhone support</li>
+        <li>Fixed scope agreed before work starts</li>
+      </ul>
+      <button class="btn start" data-tier="Two-pane refit ($999)">Start</button>
+    </article>
+  </div>
+  <p class="fine">SwiftUI and UIKit apps. React Native, Flutter and web wrappers are quoted after a 15-minute look. If we can't make it fill the inner display, you don't pay.</p>
+</section>
+
+<dialog id="requestDlg">
+  <form id="requestForm" method="dialog">
+    <h3>Request a refit</h3>
+    <p class="hint" id="requestTier"></p>
+    <label>Your name<input name="name" required></label>
+    <label>Email or phone<input name="reply" required></label>
+    <label>App Store link<input name="app" id="requestApp"></label>
+    <label>Anything we should know<textarea name="notes" rows="3"></textarea></label>
+    <div class="row end">
+      <button class="btn ghost" value="cancel" formnovalidate>Cancel</button>
+      <button class="btn" id="requestSend" value="send">Send request</button>
+    </div>
+    <pre id="requestFallback" hidden></pre>
+  </form>
+</dialog>
+
+<footer class="foot">
+  <p>DuoReady is independent and not affiliated with Apple. "Likely letterboxed" is an estimate from public App Store data; the release date can't prove which SDK an app was built with.</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

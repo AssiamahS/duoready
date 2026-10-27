@@ -1,0 +1,41 @@
+name: ios
+on:
+  push:
+    branches: [main]
+    paths: ["ios/**", ".github/workflows/ios.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    # Xcode 27 runner image (GA 2026-10-15): labels xcode-27 / xcode-27-xlarge.
+    runs-on: xcode-27
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Select highest Xcode 27.x
+        run: |
+          ls -d /Applications/Xcode*.app || true
+          XC=$(ls -d /Applications/Xcode_27*.app /Applications/Xcode-27*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XC" ]; then XC=$(ls -d /Applications/Xcode*.app | sort -V | tail -1); fi
+          echo "Using $XC"
+          sudo xcode-select -s "$XC/Contents/Developer"
+      - name: Toolchain versions
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
+          swift --version
+      - name: Generate project
+        working-directory: ios
+        run: |
+          brew install xcodegen
+          xcodegen --version
+          xcodegen generate
+      - name: Build for iOS Simulator (unsigned)
+        working-directory: ios
+        run: |
+          set -o pipefail
+          xcodebuild -project DuoReady.xcodeproj -scheme DuoReady -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build | tee build.log | grep -E "error:|warning:|BUILD (SUCCEEDED|FAILED)" || true
+          grep -q "BUILD SUCCEEDED" build.log
