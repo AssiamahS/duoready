@@ -127,7 +127,7 @@
     $("#savedCount").textContent = state.saved.length;
   }
 
-  function renderReport(app) {
+  function renderReport(app, scroll = false) {
     state.current = app;
     const a = assess(app);
     const isSaved = state.saved.some((s) => s.id === app.id);
@@ -153,7 +153,7 @@
         <a class="btn ghost" href="${esc(app.url)}" target="_blank" rel="noopener">App Store</a>
       </div>`;
     renderLists();
-    if (window.matchMedia("(max-width: 699px)").matches) $("#reportPane").scrollIntoView({ behavior: "smooth", block: "start" });
+    if (scroll && window.matchMedia("(max-width: 699px)").matches) $("#reportPane").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   function renderError(msg) {
@@ -183,7 +183,7 @@ ${location.origin + location.pathname}`;
       const app = await lookup(raw);
       state.recent = [app, ...state.recent.filter((x) => x.id !== app.id)].slice(0, 12);
       store.set("recent", state.recent);
-      renderReport(app);
+      renderReport(app, true);
     } catch (e) {
       renderError(e.message || String(e));
     } finally {
@@ -283,7 +283,7 @@ Notes: ${f.get("notes") || "-"}`;
 
   document.addEventListener("click", (e) => {
     const li = e.target.closest(".item");
-    if (li) { const app = findApp(li.dataset.id); if (app) renderReport(app); return; }
+    if (li) { const app = findApp(li.dataset.id); if (app) renderReport(app, true); return; }
     const act = e.target.closest("[data-act]");
     if (act && state.current) {
       const app = state.current;
